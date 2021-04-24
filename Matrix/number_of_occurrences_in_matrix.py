@@ -1,3 +1,6 @@
+import unittest
+
+
 def number_of_occurrences(matrix):
 
     num_occurr_dict = {}
@@ -17,6 +20,20 @@ def number_of_occurrences(matrix):
     return matrix
 
 
-matrix_m = [['A', 'B', 'C'], ['C', 'A', 'A'], ['F', 'G', 'B']]
-result = number_of_occurrences(matrix_m)
-print(result)
+class Test(unittest.TestCase):
+
+    def test_number_of_occurrences(self):
+
+        matrix = [['A', 'B', 'B', 'C'], ['B', 'C', 'A', 'C'], ['D', 'B', 'D', 'F']]
+        actual = number_of_occurrences(matrix)
+        expected = [[2, 4, 4, 3], [4, 3, 2, 3], [2, 4, 2, 1]]
+
+        self.assertEqual(expected, actual)
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+    # matrix_m = [['A', 'B', 'C'], ['C', 'A', 'A'], ['F', 'G', 'B']]
+    # result = number_of_occurrences(matrix_m)
+    # print(result)
