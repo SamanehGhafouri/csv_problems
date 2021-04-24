@@ -104,6 +104,7 @@ def min_max_element(source: str):
         mini.append(min([int(i) for i in row]))
     return min(mini), max(maxi)
 
+
 ######################################################################################
 def transpose(source: str, destination: str):
     matrix = read_csv_file(source)
@@ -125,21 +126,18 @@ def transpose(source: str, destination: str):
 
 
 def matrix_transpose(matrix):
-
     m_transpose = []
     for _ in range(len(matrix[0])):
-
         li = [0 for _ in range(len(matrix))]
         m_transpose.append(li)
 
     for row in range(len(matrix)):
         for col in range(len(matrix[0])):
-
             m_transpose[col][row] = matrix[row][col]
     return m_transpose
 
-################################## Second way of getting average #######################
 
+# ################################# Second way of getting average #######################
 def average_row(li):
     li_to_int = [int(i) for i in li]
 
@@ -243,6 +241,22 @@ def num_of_occurrences_in_matrix(source: str):
     #         matrix[row_i][col_i] = num_occur_dict[matrix_cell_value]
 
 
+###########################################################################################
+def sort_elements_in_columns(source: str):
+    matrix = read_csv_file(source)
+    matrix_int = [[int(i) for i in line] for line in matrix]
+
+    matrix_int_t = matrix_transpose(matrix_int)
+    sorted_matrix_transpose = []
+
+    for line in matrix_int_t:
+        sorted_lines = sorted(line)
+        sorted_matrix_transpose.append(sorted_lines)
+
+    matrix_int_t = matrix_transpose(sorted_matrix_transpose)
+    return matrix_int_t
+
+
 ########################################### TEST ################################################
 class TestTransposeMatrix(unittest.TestCase):
 
@@ -297,45 +311,10 @@ class TestTransposeMatrix(unittest.TestCase):
 
 ######################################################################################################
 if __name__ == '__main__':
-    # li = ['a', 'b', 'c', 'a', 'c', 'a']
-    # result = number_of_occurences_in_a_list(li)
-    # print(result)
-    #
-    result = num_of_occurrences_in_matrix('matrix_occur.csv')
-    print(result)
-    # matrix_transpose_multiplication('matrix_one_x.csv', 'matrix_two_y.csv', 'transpose_multiplication.csv')
+    sort_col = sort_elements_in_columns('sort_col_matrix.csv')
+    print(sort_col)
 
     # unittest.main()
-
-    # TestTransposeMatrix().test_transpose_matrix()
-
     # generate_numbers_in_csv_file('matrix_one_x.csv', 2, 3, 0, 1)
 
-    # read_file = read_csv_file('new_csv_file.csv')
-    # print(read_file)
-    #
-    # li = [['A', 'B', 'C', 'D'], [1, 2, 3, 4], ['XY', 'AW', 'AZ', 'UY']]
-    # generate_csv_from_input_list('generator.csv', li)
-    #
-    # # X out columns
-    # x_out_csv_column(3, 'new_csv_file.csv')
-    #
-    # # O out rows
-    # o_out_csv_row(10, 'new_csv_file.csv')
-    #
-    # t_out_zigzag('new_csv_file.csv')
 
-    # csv_append_row_column_average('new_csv_file.csv', 'new_average.csv')
-
-    # l = ['1', '2', '3']
-    # ave = compute_average_of_a_list(l)
-    # print(ave)
-
-    ############ TEST
-
-    # new_average_col_row('new_csv_file.csv', 'test_test_test.csv')
-
-    # av = min_max_element('new_csv_file.csv')
-    # print(av)
-
-    # transpose('matrix_two_y', 'matrix_two_transpose.csv')
