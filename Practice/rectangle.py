@@ -68,6 +68,17 @@ class Rectangle:
             return False
 
 
+class Square(Rectangle):
+
+    def __init__(self, length, x, y):
+
+        super().__init__(length, length, x, y)
+
+    @property
+    def length(self):
+        return self.width
+
+
 if __name__ == '__main__':
     # my_rect = Rectangle(2, 4, 1, 6)
     # my_rect.x = 29
@@ -82,3 +93,12 @@ if __name__ == '__main__':
     print(rect1.collides_with(Rectangle(1, 1, 2, 2)) == False)
     print(rect1.collides_with(Rectangle(1, 1, 1.5, 1.5)) == True)
     print(rect1.collides_with(Rectangle(1, 1, 1.5, 1.5)) == False)
+
+    my_square = Square(3, 0, 0)
+    print(my_square.area())
+
+    square_two = Square(3, 2, 2)
+    print(square_two.collides_with(my_square))
+
+    square_three = Square(3, 9, 9)
+    print(square_three.collides_with(square_two))
