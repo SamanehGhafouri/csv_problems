@@ -2,7 +2,7 @@ import requests
 import csv
 
 
-def school_safety_report():
+def park_properties():
 
     url = 'https://data.cityofnewyork.us/resource/enfh-gkve.json'
 
@@ -27,7 +27,7 @@ def school_safety_report():
             average_col[key] += int(val) / len(li)
     li.append(average_col)
 
-    with open('school_safety.csv', 'w') as w_file:
+    with open('park_properties.csv', 'w') as w_file:
         fieldnames = [col5, col4, col1, col2, col3]
         file_writer = csv.DictWriter(w_file, fieldnames=fieldnames, delimiter=',')
 
@@ -39,5 +39,5 @@ def school_safety_report():
 
 
 if __name__ == '__main__':
-    school_safety_report()
+    park_properties()
 
