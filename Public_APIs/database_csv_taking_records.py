@@ -98,6 +98,52 @@ def convert_dict_list_to_tuple_list(li):
     return [dict_to_tuple(_dict) for _dict in li]
 
 
+def create_database_table_of_records(list_tuples):
+    conn = sqlite3.connect('records_table.db')
+    c = conn.cursor()
+
+    # Create the table
+    c.execute("""CREATE TABLE business_owners_info(
+                                                   BusinessName text,
+                                                   BusinessNumber text,
+                                                   ContactNumber text,
+                                                   FirstName text,
+                                                   LastName text
+                                                    )""")
+    # Insert into the table
+    c.executemany("INSERT INTO business_owners_info VALUES (?,?,?,?,?)", list_tuples)
+    conn.commit()
+    conn.close()
+
+
+def query_all_records(table):
+    conn = sqlite3.connect(table)
+    c = conn.cursor()
+
+    # query all
+    c.execute("SELECT * FROM business_owners_info")
+    pprint(c.fetchall())
+    conn.commit()
+    conn.close()
+
+
+def query_contact_numbers_that_are_common_in_table(table):
+    conn = sqlite3.connect(table)
+    c = conn.cursor()
+
+    # query phone numbers that not null
+    c.execute("SELECT * FROM business_owners_info GROUP BY BusinessNumber HAVING ContactNumber="
+              "(SELECT contact_number FROM"
+              "(SELECT MAX(count_contact), ContactNumber contact_number FROM"
+              "(SELECT ContactNumber, COUNT(ContactNumber) count_contact"
+              " FROM business_owners_info WHERE ContactNumber != 'N/A'"
+              " GROUP BY ContactNumber HAVING COUNT(ContactNumber)>1)))")
+
+    pprint(c.fetchall())
+    conn.commit()
+    conn.close()
+
+
 if __name__ == '__main__':
     all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 500)
 
@@ -105,8 +151,16 @@ if __name__ == '__main__':
     # pprint(len(modified_records))
     # write_csv(modified_records, 'database_csv_taking_records.csv')
 
-    result = convert_dict_list_to_tuple_list(modified_records)
-    pprint(result)
+    converted_dic_to_tuples = convert_dict_list_to_tuple_list(modified_records)
+
+    # create_database_table_of_records(converted_dic_to_tuples)
+
+    # query all records
+    # query_all_records('records_table.db')
+
+    # query contactnumber in common
+    query_contact_numbers_that_are_common_in_table('records_table.db')
+
 
 
 
