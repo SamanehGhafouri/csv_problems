@@ -80,19 +80,34 @@ def data_table(records_li):
             new_records_dictionary = {col3: 'N/A', col4: obj[records_key[2]], col5: obj[records_key[0]]}
             new_records_dictionary.update(first_last_business_dict)
             new_li_records.append(new_records_dictionary)
-        new_records_dictionary = {col1: 'N/A', col2: 'N/A', col3: obj[records_key[1]], col4: obj[records_key[2]],
+        else:
+            new_records_dictionary = {col1: 'N/A', col2: 'N/A', col3: obj[records_key[1]], col4: obj[records_key[2]],
                                   col5: obj[records_key[0]]}
-        new_li_records.append(new_records_dictionary)
+            new_li_records.append(new_records_dictionary)
     return new_li_records
+
+
+def convert_dict_list_to_tuple_list(li):
+    def dict_to_tuple(_dict):
+        return (_dict['BusinessName'],
+                _dict['BusinessNumber'],
+                _dict['ContactNumber'],
+                _dict['FirstName'],
+                _dict['LastName'])
+
+    return [dict_to_tuple(_dict) for _dict in li]
 
 
 if __name__ == '__main__':
     all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 500)
 
     modified_records = data_table(all_records)
-    pprint(modified_records)
+    # pprint(len(modified_records))
+    # write_csv(modified_records, 'database_csv_taking_records.csv')
 
-    write_csv(modified_records, 'database_csv_taking_records.csv')
+    result = convert_dict_list_to_tuple_list(modified_records)
+    pprint(result)
+
 
 
 
