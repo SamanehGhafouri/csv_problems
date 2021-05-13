@@ -127,7 +127,7 @@ def query_all_records(table):
     conn.close()
 
 
-def query_contact_numbers_that_are_common_in_table(table):
+def search_for_most_common_contact_number_in_sqlite_table(table):
     conn = sqlite3.connect(table)
     c = conn.cursor()
 
@@ -142,6 +142,29 @@ def query_contact_numbers_that_are_common_in_table(table):
     pprint(c.fetchall())
     conn.commit()
     conn.close()
+
+
+def search_for_most_common_contact_number_in_csv(source):
+
+    with open(source, 'r') as r_file:
+        file_reader = csv.DictReader(r_file)
+
+        c = 'ContactNumber'
+        li_records = []
+        dict_count_of_contact_numbers = {}
+        for line in file_reader:
+            if line[c] in dict_count_of_contact_numbers and line[c] != 'N/A':
+                dict_count_of_contact_numbers[line[c]] += 1
+            elif line[c] not in dict_count_of_contact_numbers and line[c] != 'N/A':
+                dict_count_of_contact_numbers[line[c]] = 1
+            li_records.append(line)
+
+        contact_number = set()
+        for key, val in dict_count_of_contact_numbers.items():
+            if val == max(dict_count_of_contact_numbers.values()):
+                contact_number.add(key)
+
+        return [line for line in li_records if line[c] in contact_number]
 
 
 if __name__ == '__main__':
@@ -159,9 +182,10 @@ if __name__ == '__main__':
     # query_all_records('records_table.db')
 
     # query contactnumber in common
-    query_contact_numbers_that_are_common_in_table('records_table.db')
+    # search_for_most_common_contact_number_in_sqlite_table('records_table.db')
 
-
+    list_data = search_for_most_common_contact_number_in_csv('database_csv_taking_records.csv')
+    pprint(list_data)
 
 
 
