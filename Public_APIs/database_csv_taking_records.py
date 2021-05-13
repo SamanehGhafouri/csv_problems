@@ -195,6 +195,24 @@ def find_all_valid_contact_numbers_in_csv(source):
         return list_valid_contact_number
 
 
+def find_all_valid_contact_numbers_in_sqlite_table(source):
+    # implement Regular expression function at runtime
+    def regexp(expr, item):
+        reg = re.compile(expr)
+        return reg.search(item) is not None
+
+    conn = sqlite3.connect(source)
+    conn.create_function("REGEXP", 2, regexp)
+    c = conn.cursor()
+
+    c.execute("""SELECT ContactNumber FROM business_owners_info WHERE ContactNumber REGEXP
+     '^(\(*\d{3}\)*)[ \.\s\-]*(\d{3})[ \.\s\-]*(\d{4})$' """)
+
+    pprint(c.fetchall())
+    conn.commit()
+    conn.close()
+
+
 if __name__ == '__main__':
     all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 500)
 
@@ -220,6 +238,10 @@ if __name__ == '__main__':
     # valid = is_contact_number_valid(num)
     # print(valid)
 
+    # Valid contact numbers in csv
     valid_contact_numbers_csv = find_all_valid_contact_numbers_in_csv('database_csv_taking_records.csv')
-    pprint(valid_contact_numbers_csv)
+
+    # Valid contact numbers in sqlite
+    pprint(find_all_valid_contact_numbers_in_sqlite_table('records_table.db'))
+
 
