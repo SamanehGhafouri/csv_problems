@@ -176,6 +176,14 @@ def search_for_most_common_contact_number_in_csv(source):
         # return phone_number_to_records[max_contact]
 
 
+def is_contact_number_valid(contact_number):
+
+    valid_contact_number = re.match(r'^(\(*\d{3}\)*)[ \.\s\-]*(\d{3})[ \.\s\-]*(\d{4})$', contact_number)
+    if valid_contact_number:
+        return True
+    return False
+
+
 if __name__ == '__main__':
     all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 500)
 
@@ -193,5 +201,10 @@ if __name__ == '__main__':
     # query contactnumber in common
     # search_for_most_common_contact_number_in_sqlite_table('records_table.db')
 
-    list_data = search_for_most_common_contact_number_in_csv('database_csv_taking_records.csv')
-    pprint(list_data)
+    # list_data = search_for_most_common_contact_number_in_csv('database_csv_taking_records.csv')
+    # pprint(list_data)
+
+    # Valid Contact Number function
+    num = '123-345-9999'
+    valid = is_contact_number_valid(num)
+    print(valid)
