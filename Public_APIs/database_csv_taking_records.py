@@ -20,7 +20,7 @@ def records_in_url(url, limit):
             break
 
         # TODO: remove me after development
-        break
+        # break
 
     col1 = 'license_nbr'
     col2 = 'business_name'
@@ -214,13 +214,13 @@ def find_all_valid_contact_numbers_in_sqlite_table(source):
 
 
 if __name__ == '__main__':
-    all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 500)
+    all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 50000)
 
     modified_records = data_table(all_records)
     # pprint(len(modified_records))
-    # write_csv(modified_records, 'database_csv_taking_records.csv')
+    write_csv(modified_records, 'csv_taking_all_records.csv')
 
-    converted_dic_to_tuples = convert_dict_list_to_tuple_list(modified_records)
+    # converted_dic_to_tuples = convert_dict_list_to_tuple_list(modified_records)
 
     # create_database_table_of_records(converted_dic_to_tuples)
 
@@ -239,9 +239,9 @@ if __name__ == '__main__':
     # print(valid)
 
     # Valid contact numbers in csv
-    valid_contact_numbers_csv = find_all_valid_contact_numbers_in_csv('database_csv_taking_records.csv')
+    # valid_contact_numbers_csv = find_all_valid_contact_numbers_in_csv('database_csv_taking_records.csv')
 
     # Valid contact numbers in sqlite
-    pprint(find_all_valid_contact_numbers_in_sqlite_table('records_table.db'))
+    # pprint(find_all_valid_contact_numbers_in_sqlite_table('records_table.db'))
 
 
