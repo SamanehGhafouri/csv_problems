@@ -94,7 +94,7 @@ def convert_dict_list_to_tuple_list(li):
 
 
 def create_database_table_of_records(list_tuples):
-    conn = sqlite3.connect('records_table.db')
+    conn = sqlite3.connect('all_records_table.db')
     c = conn.cursor()
 
     # Create the table
@@ -118,6 +118,16 @@ def query_all_records(table):
     # query all
     c.execute("SELECT * FROM business_owners_info")
     pprint(c.fetchall())
+    conn.commit()
+    conn.close()
+
+
+def print_count_all_records_in_db(table):
+    conn = sqlite3.connect(table)
+    c = conn.cursor()
+
+    c.execute("SELECT COUNT(*) FROM business_owners_info")
+    print(c.fetchall())
     conn.commit()
     conn.close()
 
@@ -216,21 +226,22 @@ def find_all_valid_contact_numbers_in_sqlite_table(source):
 if __name__ == '__main__':
     all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 50000)
 
-    modified_records = data_table(all_records)
+    # modified_records = data_table(all_records)
     # pprint(len(modified_records))
-    write_csv(modified_records, 'csv_taking_all_records.csv')
+    # write_csv(modified_records, 'csv_taking_all_records.csv')
 
     # converted_dic_to_tuples = convert_dict_list_to_tuple_list(modified_records)
 
     # create_database_table_of_records(converted_dic_to_tuples)
 
     # query all records
-    # query_all_records('records_table.db')
+    # query_all_records('all_records_table.db')
+    # print_count_all_records_in_db('all_records_table.db')
 
     # query contactnumber in common
-    # search_for_most_common_contact_number_in_sqlite_table('records_table.db')
+    # search_for_most_common_contact_number_in_sqlite_table('all_records_table.db')
 
-    # list_data = search_for_most_common_contact_number_in_csv('database_csv_taking_records.csv')
+    # list_data = search_for_most_common_contact_number_in_csv('csv_taking_all_records.csv')
     # pprint(list_data)
 
     # Valid Contact Number function
