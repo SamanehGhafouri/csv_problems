@@ -184,6 +184,17 @@ def is_contact_number_valid(contact_number):
     return False
 
 
+def find_all_valid_contact_numbers_in_csv(source):
+
+    with open(source, 'r') as r_file:
+        file_reader = csv.DictReader(r_file)
+        list_valid_contact_number = []
+        for line in file_reader:
+            if is_contact_number_valid(line['ContactNumber']) is True:
+                list_valid_contact_number.append(line['ContactNumber'])
+        return list_valid_contact_number
+
+
 if __name__ == '__main__':
     all_records = records_in_url('https://data.cityofnewyork.us/resource/w7w3-xahh.json', 500)
 
@@ -205,6 +216,10 @@ if __name__ == '__main__':
     # pprint(list_data)
 
     # Valid Contact Number function
-    num = '123-345-9999'
-    valid = is_contact_number_valid(num)
-    print(valid)
+    # num = '123-345-9999'
+    # valid = is_contact_number_valid(num)
+    # print(valid)
+
+    valid_contact_numbers_csv = find_all_valid_contact_numbers_in_csv('database_csv_taking_records.csv')
+    pprint(valid_contact_numbers_csv)
+
