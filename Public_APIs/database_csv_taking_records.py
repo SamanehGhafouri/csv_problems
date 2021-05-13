@@ -6,7 +6,6 @@ import re
 
 
 def records_in_url(url, limit):
-
     li = []
 
     while True:
@@ -39,9 +38,7 @@ def records_in_url(url, limit):
 
 
 def write_csv(source, destination):
-
     with open(destination, 'w') as w_file:
-
         fieldnames = ['BusinessName', 'BusinessNumber', 'ContactNumber', 'FirstName', 'LastName']
         file_writer = csv.DictWriter(w_file, fieldnames=fieldnames, delimiter=',')
         file_writer.writeheader()
@@ -50,7 +47,6 @@ def write_csv(source, destination):
 
 
 def extract_first_last_or_business_name(business_name):
-
     valid_first_last_name = re.match(r'^([a-zA-Z]+),\s([a-zA-Z\s]+)$', business_name)
     if valid_first_last_name:
         first_name = valid_first_last_name.group(1)
@@ -60,7 +56,6 @@ def extract_first_last_or_business_name(business_name):
 
 
 def data_table(records_li):
-
     col1 = 'FirstName'
     col2 = 'LastName'
     col3 = 'BusinessName'
@@ -82,7 +77,7 @@ def data_table(records_li):
             new_li_records.append(new_records_dictionary)
         else:
             new_records_dictionary = {col1: 'N/A', col2: 'N/A', col3: obj[records_key[1]], col4: obj[records_key[2]],
-                                  col5: obj[records_key[0]]}
+                                      col5: obj[records_key[0]]}
             new_li_records.append(new_records_dictionary)
     return new_li_records
 
@@ -145,7 +140,6 @@ def search_for_most_common_contact_number_in_sqlite_table(table):
 
 
 def search_for_most_common_contact_number_in_csv(source):
-
     with open(source, 'r') as r_file:
         file_reader = csv.DictReader(r_file)
 
@@ -159,12 +153,27 @@ def search_for_most_common_contact_number_in_csv(source):
                 dict_count_of_contact_numbers[line[c]] = 1
             li_records.append(line)
 
-        contact_number = set()
+        max_key, max_val = None, 0
         for key, val in dict_count_of_contact_numbers.items():
-            if val == max(dict_count_of_contact_numbers.values()):
-                contact_number.add(key)
+            if val > max_val:
+                max_key = key
+                max_val = val
+        return [line for line in li_records if line[c] in max_key]
 
-        return [line for line in li_records if line[c] in contact_number]
+        # Faster way
+        # phone_number_to_records = {}
+        # for line in file_reader:
+        #     if line[c] in phone_number_to_records and line[c] != 'N/A':
+        #         phone_number_to_records[line[c]].append(line)
+        #     elif line[c] not in phone_number_to_records and line[c] != 'N/A':
+        #         phone_number_to_records[line[c]] = [line]
+        #
+        # max_contact, max_records = None, []
+        # for contact, records in phone_number_to_records.items():
+        #     if len(records) > len(max_records):
+        #         max_contact = contact
+        #         max_records = records
+        # return phone_number_to_records[max_contact]
 
 
 if __name__ == '__main__':
@@ -186,7 +195,3 @@ if __name__ == '__main__':
 
     list_data = search_for_most_common_contact_number_in_csv('database_csv_taking_records.csv')
     pprint(list_data)
-
-
-
-
