@@ -122,6 +122,15 @@ def query_all_records(table):
     conn.close()
 
 
+def create_index_on_contact_number_db(table):
+    conn = sqlite3.connect(table)
+    c = conn.cursor()
+
+    c.execute("""CREATE INDEX contact_index ON business_owners_info(ContactNumber)""")
+    conn.commit()
+    conn.close()
+
+
 def print_count_all_records_in_db(table):
     conn = sqlite3.connect(table)
     c = conn.cursor()
@@ -254,5 +263,8 @@ if __name__ == '__main__':
 
     # Valid contact numbers in sqlite
     # pprint(find_all_valid_contact_numbers_in_sqlite_table('records_table.db'))
+
+    # create a non-unique index on contact number to make the query faster
+    # create_index_on_contact_number_db('records_table.db')
 
 
